@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     @State var userID: String = ""
+    @State var shouldLogout: Bool? = false
     
     var body: some View {
         if userID.isEmpty {
@@ -16,7 +17,12 @@ struct LoginView: View {
                 login()
             }
         } else {
-            QuizStartView()
+            QuizStartView(logout: $shouldLogout)
+                .onChange(of: shouldLogout) { oldValue, newValue in
+                    if newValue! {
+                        userID = ""
+                    }
+                }
         }
    
     }

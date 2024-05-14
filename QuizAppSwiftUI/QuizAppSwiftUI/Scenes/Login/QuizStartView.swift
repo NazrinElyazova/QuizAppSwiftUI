@@ -9,14 +9,17 @@ import SwiftUI
 
 struct QuizStartView: View {
     @StateObject var model = QuizViewModel()
-    
     @State private var level: QuestionLevel = .beginner
     @State private var path: [Question] = []
+    
+    @Binding var logout: Bool?
     
     var body: some View {
         NavigationStack(path: $path) {
             ZStack {
                 VStack {
+                    Spacer()
+                    
                     Picker("", selection: $level) {
                         ForEach(QuestionLevel.allCases, id: \.self) {
                             Text("\($0.text)")
@@ -32,6 +35,12 @@ struct QuizStartView: View {
                             }
                         }
                     }
+                    
+                    Spacer()
+                    
+                    Button("Logout", systemImage: "xbox.logo") {
+                      logout = true
+                    }
                 }
                 if model.isLoading {
                     ProgressView()
@@ -45,10 +54,13 @@ struct QuizStartView: View {
             if let newValue {
                 path.append(newValue)
             }
+            else {
+                path = []
+            }
         }
     }
 }
 
 #Preview {
-    QuizStartView()
+    QuizStartView(logout: .constant(false))
 }

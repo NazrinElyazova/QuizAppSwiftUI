@@ -53,7 +53,11 @@ final class QuizViewModel: ObservableObject {
             try await retrieveQuestions(level: level)
         }
     }
-    
+    func syncAnswers() {
+        Task {
+       try? await repository.syncAnswers()
+        }
+    }
     func quit() {
         level = .random
         questions = []
